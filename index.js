@@ -54,7 +54,7 @@ async function run() {
             res.send(user);
         })
 
-
+        // Create user
         app.post('/users', async (req, res) => {
             const user = req.body;
             console.log(user);
@@ -63,7 +63,27 @@ async function run() {
         })
 
 
+        // Update User
+        app.put('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const user = req.body;
+            console.log(user);
 
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedUser = {
+                $set: {
+                    name: user.name,
+                    email: user.email
+                }
+            }
+            const result = await userCollection.updateOne(filter, updatedUser, options);
+            res.send(result);
+        })
+
+
+
+        // Delete User
         app.delete('/users/:id', async (req, res) => {
             const id = req.params.id;
 
